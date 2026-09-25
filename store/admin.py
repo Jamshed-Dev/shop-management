@@ -172,8 +172,8 @@ class ProductVariantAdmin(admin.ModelAdmin):
 
     def effective_price_display(self, obj):
         if obj.price_override is not None:
-            return f"${obj.price_override}"
-        return f"${obj.product.current_price} (Product)"
+            return f"৳{obj.price_override}"
+        return f"৳{obj.product.current_price} (Product)"
     effective_price_display.short_description = "Active Price"
 
     def stock_badge(self, obj):
@@ -268,14 +268,14 @@ class ProductAdmin(admin.ModelAdmin):
     def price_display(self, obj):
         if obj.new_price:
             return format_html(
-                '<span style="color: #198754; font-weight: 600;">${}</span> <del style="color: #6c757d; font-size: 11px;">${}</del>',
+                '<span style="color: #198754; font-weight: 600;">৳{}</span> <del style="color: #6c757d; font-size: 11px;">৳{}</del>',
                 obj.new_price, obj.main_price
             )
-        return format_html('<span>${}</span>', obj.main_price)
+        return format_html('<span>৳{}</span>', obj.main_price)
     price_display.short_description = "Price"
 
     def current_price_display(self, obj):
-        return f"${obj.current_price}"
+        return f"৳{obj.current_price}"
     current_price_display.short_description = "Effective Selling Price"
 
     def stock_badge(self, obj):
@@ -487,21 +487,21 @@ class OrderAdmin(admin.ModelAdmin):
     items_count.short_description = "Items"
 
     def subtotal_display(self, obj):
-        return f"${obj.subtotal}"
+        return f"৳{obj.subtotal}"
     subtotal_display.short_description = "Subtotal"
 
     def discount_display(self, obj):
         if obj.discount > 0:
-            return format_html('<span style="color: #dc3545;">-${}</span>', obj.discount)
-        return "$0.00"
+            return format_html('<span style="color: #dc3545;">-৳{}</span>', obj.discount)
+        return "৳0.00"
     discount_display.short_description = "Discount"
 
     def shipping_display(self, obj):
-        return f"${obj.shipping_cost}"
+        return f"৳{obj.shipping_cost}"
     shipping_display.short_description = "Shipping"
 
     def total_display(self, obj):
-        return format_html('<strong style="font-size: 13px;">${}</strong>', obj.total)
+        return format_html('<strong style="font-size: 13px;">৳{}</strong>', obj.total)
     total_display.short_description = "Total"
 
     def save_model(self, request, obj, form, change):

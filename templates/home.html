@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Our Store | Shop Online</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-dark: #4338ca;
+            --primary-light: #eef2ff;
+            --accent: #06b6d4;
+            --dark: #0f172a;
+            --gray-100: #f8fafc;
+            --gray-200: #e2e8f0;
+            --gray-600: #475569;
+            --gray-800: #1e293b;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f8fafc;
+            color: var(--gray-800);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Navbar */
+        .store-navbar {
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .brand-logo {
+            font-weight: 800;
+            font-size: 1.35rem;
+            background: linear-gradient(135deg, var(--primary) 0%, #818cf8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        /* Hero Banner */
+        .hero-banner {
+            background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4338ca 100%);
+            color: #ffffff;
+            padding: 4.5rem 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-banner::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(129, 140, 248, 0.25) 0%, rgba(255,255,255,0) 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .hero-badge {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #e0e7ff;
+            font-size: 0.85rem;
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-weight: 600;
+        }
+
+        .hero-title {
+            font-size: 2.85rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+            margin-top: 1rem;
+        }
+
+        .hero-subtitle {
+            color: #c7d2fe;
+            font-size: 1.15rem;
+            max-width: 600px;
+            line-height: 1.6;
+        }
+
+        /* Feature Badges */
+        .feature-card {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 14px;
+            padding: 1.2rem;
+            color: #ffffff;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-3px);
+        }
+
+        /* Filter Pills */
+        .filter-btn {
+            border: 1px solid var(--gray-200);
+            background: #ffffff;
+            color: var(--gray-600);
+            border-radius: 50px;
+            padding: 0.45rem 1.25rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-block;
+            cursor: pointer;
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            background: var(--primary);
+            color: #ffffff;
+            border-color: var(--primary);
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
+        }
+
+        /* Product Cards */
+        .product-card {
+            background: #ffffff;
+            border-radius: 16px;
+            border: 1px solid var(--gray-200);
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .product-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 16px 32px rgba(15, 23, 42, 0.08);
+            border-color: #cbd5e1;
+        }
+
+        .product-image-box {
+            position: relative;
+            background: #f1f5f9;
+            height: 230px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .product-image-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+
+        .product-card:hover .product-image-box img {
+            transform: scale(1.05);
+        }
+
+        .product-placeholder-icon {
+            font-size: 4rem;
+            color: #94a3b8;
+        }
+
+        .stock-badge {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.3rem 0.65rem;
+            border-radius: 6px;
+            backdrop-filter: blur(4px);
+        }
+
+        .category-badge {
+            font-size: 0.75rem;
+            color: var(--primary);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .product-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 0.35rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .price-text {
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: var(--dark);
+        }
+
+        .old-price {
+            text-decoration: line-through;
+            color: #94a3b8;
+            font-size: 0.95rem;
+            font-weight: 500;
+            margin-left: 0.4rem;
+        }
+
+        .quick-view-btn {
+            background: var(--primary-light);
+            color: var(--primary);
+            border: none;
+            font-weight: 600;
+            border-radius: 10px;
+            padding: 0.5rem 1rem;
+            transition: all 0.2s ease;
+            width: 100%;
+        }
+
+        .quick-view-btn:hover {
+            background: var(--primary);
+            color: #ffffff;
+        }
+
+        /* Empty state */
+        .empty-state {
+            background: #ffffff;
+            border-radius: 20px;
+            border: 2px dashed var(--gray-200);
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+
+        footer {
+            margin-top: auto;
+            background: #ffffff;
+            border-top: 1px solid var(--gray-200);
+            padding: 2rem 0;
+            color: var(--gray-600);
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg store-navbar py-3">
+        <div class="container">
+            <a class="brand-logo" href="/">
+                <i class="bi bi-bag-check-fill text-primary"></i> Shop Management
+            </a>
+
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navMenu">
+                <div class="mx-auto my-2 my-lg-0 col-12 col-lg-5">
+                    <div class="input-group">
+                        <span class="input-group-text bg-white border-end-0 rounded-start-pill text-muted">
+                            <i class="bi bi-search"></i>
+                        </span>
+                        <input type="text" id="searchInput" class="form-control border-start-0 rounded-end-pill shadow-none" placeholder="Search products by name or SKU...">
+                    </div>
+                </div>
+
+                <div class="d-flex align-items-center gap-2 mt-3 mt-lg-0">
+                    <a href="/login/" class="btn btn-outline-secondary rounded-pill px-3 fw-semibold">
+                        <i class="bi bi-box-arrow-in-right me-1"></i> Staff Login
+                    </a>
+                    <a href="/admin/" class="btn btn-primary rounded-pill px-3 fw-semibold" style="background: var(--primary); border: none;">
+                        <i class="bi bi-shield-lock me-1"></i> Admin Panel
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Banner Section -->
+    <section class="hero-banner">
+        <div class="container position-relative">
+            <div class="row align-items-center g-4">
+                <div class="col-lg-7">
+                    <div class="hero-badge mb-3">
+                        <i class="bi bi-stars text-warning"></i> Open Online Store
+                    </div>
+                    <h1 class="hero-title">Discover Quality Products at the Best Value</h1>
+                    <p class="hero-subtitle my-3">
+                        Explore our wide range of products with fast delivery, authentic quality, and smooth shopping experience. No account required to browse!
+                    </p>
+                    <div class="d-flex flex-wrap gap-3 mt-4">
+                        <a href="#products-section" class="btn btn-light btn-lg rounded-pill px-4 fw-bold text-primary shadow">
+                            <i class="bi bi-cart3 me-1"></i> View Products
+                        </a>
+                        <a href="/login/" class="btn btn-outline-light btn-lg rounded-pill px-4 fw-semibold">
+                            <i class="bi bi-speedometer2 me-1"></i> Dashboard
+                        </a>
+                    </div>
+                </div>
+
+                <div class="col-lg-5">
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <div class="feature-card d-flex align-items-center gap-3">
+                                <div class="bg-primary bg-opacity-25 rounded-circle p-3 text-white fs-3">
+                                    <i class="bi bi-truck"></i>
+                                </div>
+                                <div>
+                                    <h6 class="mb-1 fw-bold text-white">Reliable Shipping</h6>
+                                    <small class="text-white-50">Fast dispatch directly from warehouse</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="feature-card d-flex align-items-center gap-3">
+                                <div class="bg-info bg-opacity-25 rounded-circle p-3 text-white fs-3">
+                                    <i class="bi bi-patch-check"></i>
+                                </div>
+                                <div>
+                                    <h6 class="mb-1 fw-bold text-white">100% Genuine Items</h6>
+                                    <small class="text-white-50">Guaranteed quality & authentic items</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="feature-card d-flex align-items-center gap-3">
+                                <div class="bg-success bg-opacity-25 rounded-circle p-3 text-white fs-3">
+                                    <i class="bi bi-headset"></i>
+                                </div>
+                                <div>
+                                    <h6 class="mb-1 fw-bold text-white">24/7 Customer Care</h6>
+                                    <small class="text-white-50">Ready to help you anytime</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Products Section -->
+    <main class="container py-5" id="products-section">
+        <!-- Section Header -->
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+            <div>
+                <span class="category-badge">Our Catalog</span>
+                <h2 class="fw-bold mb-1">Available Products</h2>
+                <p class="text-muted mb-0">Browse through all items available in stock</p>
+            </div>
+
+            <!-- Categories / Product Types Filter -->
+            <div class="d-flex flex-wrap gap-2" id="filterButtons">
+                <button class="filter-btn active" data-filter="all">All Products</button>
+                {% for pt in product_types %}
+                    <button class="filter-btn" data-filter="{{ pt.title|lower }}">{{ pt.title }}</button>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Products Grid -->
+        {% if products %}
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4" id="productsGrid">
+                {% for product in products %}
+                <div class="col product-item" 
+                     data-title="{{ product.title|lower }}" 
+                     data-sku="{{ product.sku|lower }}" 
+                     data-type="{% if product.product_type %}{{ product.product_type.title|lower }}{% endif %}"
+                     data-collection="{% if product.collection %}{{ product.collection.title|lower }}{% endif %}">
+                    
+                    <div class="product-card">
+                        <!-- Image Box -->
+                        <div class="product-image-box">
+                            {% if product.image %}
+                                <img src="{{ product.image.url }}" alt="{{ product.title }}">
+                            {% elif product.image_url %}
+                                <img src="{{ product.image_url }}" alt="{{ product.title }}">
+                            {% else %}
+                                <div class="product-placeholder-icon">
+                                    <i class="bi bi-box-seam"></i>
+                                </div>
+                            {% endif %}
+
+                            <!-- Stock Badge -->
+                            {% if product.stock > 0 %}
+                                <span class="stock-badge bg-success bg-opacity-75 text-white">
+                                    <i class="bi bi-check-circle-fill me-1"></i> In Stock ({{ product.stock }})
+                                </span>
+                            {% else %}
+                                <span class="stock-badge bg-danger bg-opacity-75 text-white">
+                                    <i class="bi bi-x-circle-fill me-1"></i> Out of Stock
+                                </span>
+                            {% endif %}
+                        </div>
+
+                        <!-- Card Body -->
+                        <div class="p-3 d-flex flex-column flex-grow-1">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <span class="category-badge">
+                                    {% if product.product_type %}{{ product.product_type.title }}{% else %}General{% endif %}
+                                </span>
+                                <small class="text-muted font-monospace" style="font-size: 0.75rem;">SKU: {{ product.sku }}</small>
+                            </div>
+
+                            <h5 class="product-title" title="{{ product.title }}">{{ product.title }}</h5>
+
+                            {% if product.short_description %}
+                                <p class="text-muted small mb-3 flex-grow-1" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+                                    {{ product.short_description }}
+                                </p>
+                            {% else %}
+                                <p class="text-muted small mb-3 flex-grow-1">Quality store merchandise.</p>
+                            {% endif %}
+
+                            <div class="pt-2 border-top mt-auto">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <div>
+                                        <span class="price-text">৳{{ product.current_price }}</span>
+                                        {% if product.old_price %}
+                                            <span class="old-price">৳{{ product.old_price }}</span>
+                                        {% endif %}
+                                    </div>
+                                    {% if product.collection %}
+                                        <span class="badge bg-light text-secondary border">
+                                            {{ product.collection.title }}
+                                        </span>
+                                    {% endif %}
+                                </div>
+
+                                <button class="quick-view-btn" 
+                                        onclick="showQuickView('{{ product.title|escapejs }}', '{{ product.sku|escapejs }}', '{{ product.current_price }}', '{% if product.old_price %}{{ product.old_price }}{% endif %}', '{{ product.stock }}', '{% if product.product_type %}{{ product.product_type.title|escapejs }}{% else %}General{% endif %}', '{% if product.collection %}{{ product.collection.title|escapejs }}{% else %}N/A{% endif %}', '{% if product.description %}{{ product.description|escapejs }}{% elif product.short_description %}{{ product.short_description|escapejs }}{% else %}No additional details provided.{% endif %}', '{% if product.image %}{{ product.image.url }}{% elif product.image_url %}{{ product.image_url }}{% endif %}')">
+                                    <i class="bi bi-eye me-1"></i> Quick View
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- No search results message -->
+            <div id="noResultsMessage" class="empty-state d-none mt-4">
+                <i class="bi bi-search text-muted" style="font-size: 3rem;"></i>
+                <h4 class="fw-bold mt-3">No matching products found</h4>
+                <p class="text-muted">Try searching with a different keyword or change category filter.</p>
+            </div>
+        {% else %}
+            <!-- Empty state when no products in DB -->
+            <div class="empty-state">
+                <i class="bi bi-box-seam text-primary" style="font-size: 4rem;"></i>
+                <h3 class="fw-bold mt-3">No products available yet</h3>
+                <p class="text-muted mb-4">Products added through the admin panel will appear here automatically.</p>
+                <a href="/admin/store/product/add/" class="btn btn-primary rounded-pill px-4 fw-semibold" style="background: var(--primary); border: none;">
+                    <i class="bi bi-plus-lg me-1"></i> Add Your First Product
+                </a>
+            </div>
+        {% endif %}
+    </main>
+
+    <!-- Quick View Modal -->
+    <div class="modal fade" id="quickViewModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content rounded-4 border-0 shadow">
+                <div class="modal-header border-0 pb-0">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="closeQuickView()"></button>
+                </div>
+                <div class="modal-body p-4 pt-0">
+                    <div class="row g-4 align-items-center">
+                        <div class="col-md-5">
+                            <div class="bg-light rounded-4 p-3 text-center d-flex align-items-center justify-content-center" style="min-height: 260px;" id="modalImageBox">
+                                <img id="modalImage" src="" alt="Product" class="img-fluid rounded-3" style="max-height: 240px; object-fit: contain;">
+                                <div id="modalPlaceholderIcon" class="product-placeholder-icon">
+                                    <i class="bi bi-box-seam"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-7">
+                            <span class="category-badge" id="modalType">Category</span>
+                            <h3 class="fw-bold mt-1 mb-2" id="modalTitle">Product Title</h3>
+                            <div class="text-muted small mb-3">
+                                <span>SKU: <strong id="modalSku" class="font-monospace">SKU-001</strong></span>
+                                <span class="mx-2">•</span>
+                                <span>Collection: <strong id="modalCollection">Default</strong></span>
+                            </div>
+
+                            <div class="d-flex align-items-baseline gap-2 mb-3">
+                                <span class="fs-2 fw-bold text-primary" id="modalPrice">৳0.00</span>
+                                <span class="fs-5 text-muted text-decoration-line-through d-none" id="modalOldPrice">৳0.00</span>
+                            </div>
+
+                            <div class="mb-3">
+                                <span class="badge" id="modalStockBadge">In Stock</span>
+                            </div>
+
+                            <div class="mb-4">
+                                <h6 class="fw-bold mb-1">Description:</h6>
+                                <p class="text-muted small mb-0" id="modalDescription" style="white-space: pre-line;">Product description goes here.</p>
+                            </div>
+
+                            <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal" onclick="closeQuickView()">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container text-center">
+            <div class="d-flex justify-content-center align-items-center gap-2 mb-2">
+                <i class="bi bi-bag-check-fill text-primary fs-5"></i>
+                <span class="fw-bold text-dark">Shop Management</span>
+            </div>
+            <p class="mb-0 text-muted small">&copy; 2026 Shop Management Store. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Quick View Modal
+        const modalElement = document.getElementById('quickViewModal');
+        let quickViewModal = null;
+        try {
+            if (typeof bootstrap !== 'undefined') {
+                quickViewModal = new bootstrap.Modal(modalElement);
+            }
+        } catch (e) {
+            console.error('Bootstrap modal init error:', e);
+        }
+
+        function closeQuickView() {
+            try {
+                if (quickViewModal) {
+                    quickViewModal.hide();
+                }
+            } catch (err) {}
+            // Reliable fallback
+            modalElement.classList.remove('show');
+            modalElement.style.display = 'none';
+            document.body.classList.remove('modal-open');
+            document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
+        }
+
+        modalElement.addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeQuickView();
+            }
+        });
+
+        function showQuickView(title, sku, price, oldPrice, stock, type, collection, description, imageUrl) {
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalSku').textContent = sku;
+            document.getElementById('modalPrice').textContent = '৳' + price;
+            
+            const oldPriceEl = document.getElementById('modalOldPrice');
+            if (oldPrice && oldPrice !== 'None' && oldPrice.trim() !== '') {
+                oldPriceEl.textContent = '৳' + oldPrice;
+                oldPriceEl.classList.remove('d-none');
+            } else {
+                oldPriceEl.classList.add('d-none');
+            }
+
+            document.getElementById('modalType').textContent = type;
+            document.getElementById('modalCollection').textContent = collection;
+            document.getElementById('modalDescription').textContent = description;
+
+            const stockBadge = document.getElementById('modalStockBadge');
+            const stockNum = parseInt(stock) || 0;
+            if (stockNum > 0) {
+                stockBadge.className = 'badge bg-success bg-opacity-10 text-success border border-success-subtle px-3 py-2';
+                stockBadge.innerHTML = '<i class="bi bi-check-circle me-1"></i> In Stock (' + stockNum + ' units available)';
+            } else {
+                stockBadge.className = 'badge bg-danger bg-opacity-10 text-danger border border-danger-subtle px-3 py-2';
+                stockBadge.innerHTML = '<i class="bi bi-x-circle me-1"></i> Out of Stock';
+            }
+
+            const imgEl = document.getElementById('modalImage');
+            const placeholderEl = document.getElementById('modalPlaceholderIcon');
+            if (imageUrl && imageUrl.trim() !== '') {
+                imgEl.src = imageUrl;
+                imgEl.classList.remove('d-none');
+                placeholderEl.classList.add('d-none');
+            } else {
+                imgEl.classList.add('d-none');
+                placeholderEl.classList.remove('d-none');
+            }
+
+            if (quickViewModal) {
+                quickViewModal.show();
+            } else {
+                modalElement.classList.add('show');
+                modalElement.style.display = 'block';
+                document.body.classList.add('modal-open');
+            }
+        }
+
+        // Live Search & Category Filter
+        const searchInput = document.getElementById('searchInput');
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const productItems = document.querySelectorAll('.product-item');
+        const noResultsMessage = document.getElementById('noResultsMessage');
+
+        let currentFilter = 'all';
+
+        function filterProducts() {
+            const query = (searchInput ? searchInput.value : '').toLowerCase().trim();
+            let visibleCount = 0;
+
+            productItems.forEach(item => {
+                const title = item.getAttribute('data-title') || '';
+                const sku = item.getAttribute('data-sku') || '';
+                const type = item.getAttribute('data-type') || '';
+                const collection = item.getAttribute('data-collection') || '';
+
+                const matchesSearch = !query || title.includes(query) || sku.includes(query) || type.includes(query) || collection.includes(query);
+                const matchesFilter = currentFilter === 'all' || type === currentFilter || collection === currentFilter;
+
+                if (matchesSearch && matchesFilter) {
+                    item.classList.remove('d-none');
+                    visibleCount++;
+                } else {
+                    item.classList.add('d-none');
+                }
+            });
+
+            if (noResultsMessage) {
+                if (visibleCount === 0 && productItems.length > 0) {
+                    noResultsMessage.classList.remove('d-none');
+                } else {
+                    noResultsMessage.classList.add('d-none');
+                }
+            }
+        }
+
+        if (searchInput) {
+            searchInput.addEventListener('input', filterProducts);
+        }
+
+        filterButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterButtons.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentFilter = btn.getAttribute('data-filter');
+                filterProducts();
+            });
+        });
+    </script>
+</body>
+</html>

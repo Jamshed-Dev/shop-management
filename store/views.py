@@ -3,6 +3,18 @@ from django.shortcuts import redirect
 from django.urls import reverse
 from rest_framework_simplejwt.exceptions import InvalidToken, AuthenticationFailed
 from auth_app.authentication import JWTAuthentication
+from .models import Product, Collection, ProductType
+
+# Public Home View (No login required)
+class HomeView(TemplateView):
+    template_name = 'home.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['products'] = Product.objects.filter(is_active=True).select_related('collection', 'product_type')
+        context['collections'] = Collection.objects.filter(is_active=True)
+        context['product_types'] = ProductType.objects.filter(is_active=True)
+        return context
 
 class JWTRequiredMixin:
     """

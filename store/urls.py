@@ -5,7 +5,7 @@ urlpatterns = [
     path('api/', include('store.api.urls')),
     
     # Frontend Routes
-    path('', views.DashboardView.as_view(), name='frontend-home'),
+    path('', views.HomeView.as_view(), name='frontend-home'),
     path('login/', views.LoginView.as_view(), name='frontend-login'),
     path('forgot-password/', views.ForgotPasswordView.as_view(), name='frontend-forgot-password'),
     path('verify-code/', views.VerifyCodeView.as_view(), name='frontend-verify-code'),
