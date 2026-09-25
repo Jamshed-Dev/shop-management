@@ -47,16 +47,14 @@ CORS_ALLOWED_ORIGINS = [
     "http://192.168.43.80:5173",
     "https://b20bd4426758.ngrok-free.app",
 ]
+CORS_ALLOW_ALL_ORIGINS = True
 CSRF_TRUSTED_ORIGINS = [
+    "https://*.vercel.app",
+    "https://*.now.sh",
     "http://localhost:5173",
     "http://localhost:3000",
-    "http://192.168.10.193:5173",
-    "http://100.120.164.41:5173/",
-    "http://192.168.10.193:3000",
-    "http://192.168.10.193:3001",
-    "http://192.168.43.80:5173",
+    "http://127.0.0.1:8000",
     "https://b20bd4426758.ngrok-free.app",
-
 ]
 
 CORS_ALLOW_HEADERS = [
@@ -91,6 +89,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     #CORS Middleware
     "corsheaders.middleware.CorsMiddleware",
@@ -128,9 +127,11 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.1/ref/settings/#databases
 
+NEON_DEFAULT_DB_URL = "postgresql://neondb_owner:npg_YHem4KzUfE6g@ep-young-moon-b3c0j242-pooler.c-4.ap-southeast-1.aws.neon.tech/neondb?sslmode=require"
+
 DATABASES = {
     "default": dj_database_url.config(
-        default=os.getenv("DATABASE_URL"),
+        default=os.getenv("DATABASE_URL") or NEON_DEFAULT_DB_URL,
         conn_max_age=600,
         conn_health_checks=True,
     )
@@ -170,9 +171,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
-MEDIA_URL = "uploads/"
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+MEDIA_URL = "/uploads/"
 
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "uploads/")

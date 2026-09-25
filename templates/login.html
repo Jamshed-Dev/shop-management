@@ -5,22 +5,103 @@
     {% load static %}
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Shop Management</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --primary-light: #eef2ff;
+            --dark: #0f172a;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+
+        .auth-wrapper {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            position: relative;
+        }
+
+        .auth-card {
+            width: 100%;
+            max-width: 440px;
+            padding: 2.5rem;
+            background: #ffffff;
+            box-shadow: 0 20px 40px -10px rgba(15, 23, 42, 0.12);
+            border-radius: 1.5rem;
+            border: 1px solid rgba(226, 232, 240, 0.9);
+            position: relative;
+            z-index: 10;
+        }
+
+        .auth-brand {
+            font-weight: 800;
+            font-size: 1.85rem;
+            background: linear-gradient(135deg, var(--primary) 0%, #818cf8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.35rem;
+            text-align: center;
+        }
+
+        .demo-box {
+            background-color: #f0f7ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 12px;
+            padding: 0.9rem 1.1rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .btn-primary {
+            background-color: var(--primary) !important;
+            border-color: var(--primary) !important;
+            padding: 0.75rem 1.25rem;
+            font-weight: 700;
+            border-radius: 0.65rem;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-hover) !important;
+            border-color: var(--primary-hover) !important;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(79, 70, 229, 0.25);
+        }
+
+        .form-floating .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 0.25rem rgba(79, 70, 229, 0.15);
+        }
+    </style>
 </head>
 <body>
 
 <div class="auth-wrapper">
     <div class="auth-card">
         <form id="loginForm">
-            <h1 class="auth-brand">Shop Admin</h1>
-            <p class="text-center text-muted mb-3">Sign in to manage your store</p>
+            <h1 class="auth-brand"><i class="bi bi-bag-check-fill me-1"></i> Shop Admin</h1>
+            <p class="text-center text-muted mb-3" style="font-size: 0.95rem;">Sign in to access store management</p>
             
             <!-- Demo Credentials Box -->
-            <div class="alert alert-info border-0 rounded-3 p-3 mb-3 text-start" style="background-color: #eff6ff; border: 1px solid #bfdbfe !important;">
-                <div class="d-flex justify-content-between align-items-center mb-2">
+            <div class="demo-box text-start">
+                <div class="d-flex justify-content-between align-items-center mb-1">
                     <span class="fw-bold text-primary small">
                         <i class="bi bi-person-badge-fill me-1"></i> Demo Credentials
                     </span>
@@ -70,8 +151,7 @@
     </div>
 </div>
 
-<script src="{% static 'js/api.js' %}"></script>
-<script src="{% static 'js/auth.js' %}"></script>
+<!-- Self-Contained JavaScript for Login & API Support -->
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const togglePassword = document.getElementById('togglePassword');
@@ -95,12 +175,63 @@
             });
         }
 
-        if(sessionStorage.getItem('resetSuccess')) {
-            const errorAlert = document.getElementById('errorAlert');
-            errorAlert.className = 'alert alert-success';
-            errorAlert.textContent = 'Password reset successfully. Please log in.';
-            errorAlert.classList.remove('d-none');
-            sessionStorage.removeItem('resetSuccess');
+        const loginForm = document.getElementById('loginForm');
+        if (loginForm) {
+            loginForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                const email = document.getElementById('email').value.trim();
+                const pwd = document.getElementById('password').value;
+                const submitBtn = document.getElementById('submitBtn');
+                const errorAlert = document.getElementById('errorAlert');
+                
+                errorAlert.classList.add('d-none');
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Signing in...';
+                
+                try {
+                    const response = await fetch('/auth/jwt/create/', {
+                        method: 'POST',
+                        headers: { 
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
+                        },
+                        body: JSON.stringify({ email: email, password: pwd })
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (response.ok && data.access) {
+                        localStorage.setItem('access_token', data.access);
+                        if (data.refresh) localStorage.setItem('refresh_token', data.refresh);
+                        
+                        // Set cookies for Django JWTRequiredMixin authentication
+                        const isHttps = window.location.protocol === 'https:';
+                        const secureFlag = isHttps ? '; Secure' : '';
+                        document.cookie = `access=${data.access}; path=/; max-age=2592000; SameSite=Lax${secureFlag}`;
+                        if (data.refresh) {
+                            document.cookie = `refresh=${data.refresh}; path=/; max-age=2592000; SameSite=Lax${secureFlag}`;
+                        }
+                        
+                        const urlParams = new URLSearchParams(window.location.search);
+                        const nextUrl = urlParams.get('next');
+                        if (nextUrl && nextUrl.startsWith('/') && nextUrl !== '/login/') {
+                            window.location.href = nextUrl;
+                        } else {
+                            window.location.href = '/dashboard/';
+                        }
+                    } else {
+                        const errMsg = data.detail || (data.non_field_errors && data.non_field_errors[0]) || 'Invalid email or password.';
+                        throw new Error(errMsg);
+                    }
+                } catch (err) {
+                    errorAlert.classList.remove('d-none');
+                    errorAlert.textContent = err.message || 'Login failed. Please check credentials or network.';
+                } finally {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Sign in';
+                }
+            });
         }
     });
 </script>
