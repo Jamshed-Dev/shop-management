@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% load static %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Code - Shop Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+</head>
+<body>
+
+<div class="auth-wrapper">
+    <div class="auth-card">
+        <form id="verifyCodeForm">
+            <h1 class="auth-brand mb-2">Verify Code</h1>
+            <p class="text-center text-muted small mb-4">Enter the 6-digit code sent to <br><strong class="text-dark"><span id="displayEmail"></span></strong></p>
+            
+            <div class="alert alert-danger d-none" id="errorAlert" role="alert"></div>
+            <div class="alert alert-success d-none" id="successAlert" role="alert"></div>
+
+            <div class="form-floating mb-4">
+                <input type="text" class="form-control text-center fs-4 letter-spacing-lg" id="code" placeholder="123456" maxlength="6" required autocomplete="off" style="letter-spacing: 0.5rem; font-weight: 600;">
+                <label for="code">Verification Code</label>
+            </div>
+
+            <button class="w-100 btn btn-lg btn-primary mb-3" type="submit" id="submitBtn">Verify Code</button>
+            <div class="text-center mb-3">
+                <button type="button" class="btn btn-link text-decoration-none p-0 small text-muted hover-primary" id="resendBtn">Resend Code</button>
+            </div>
+            <div class="text-center">
+                <a href="/login/" class="text-decoration-none small text-muted hover-primary">Back to Login</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="{% static 'js/api.js' %}"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const email = sessionStorage.getItem('resetEmail');
+    const token = sessionStorage.getItem('resetToken');
+    
+    if(!email || !token) {
+        window.location.href = '/forgot-password/';
+        return;
+    }
+    
+    document.getElementById('displayEmail').textContent = email;
+    
+    const form = document.getElementById('verifyCodeForm');
+    const resendBtn = document.getElementById('resendBtn');
+    const errorAlert = document.getElementById('errorAlert');
+    const successAlert = document.getElementById('successAlert');
+    
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const code = document.getElementById('code').value;
+        const submitBtn = document.getElementById('submitBtn');
+        
+        errorAlert.classList.add('d-none');
+        successAlert.classList.add('d-none');
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Verifying...';
+        
+        try {
+            const response = await fetch('/auth/password-reset/verify-code/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: email, code: code, token: token })
+            });
+            
+            const data = await response.json();
+            
+            if (response.ok) {
+                sessionStorage.setItem('resetCode', code);
+                window.location.href = '/reset-password/';
+            } else {
+                throw data;
+            }
+        } catch (err) {
+            errorAlert.classList.remove('d-none');
+            errorAlert.textContent = extractErrorMessage(err) || 'Invalid or expired code.';
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Verify Code';
+        }
+    });
+    
+    resendBtn.addEventListener('click', async () => {
+        resendBtn.disabled = true;
+        resendBtn.textContent = 'Sending...';
+        errorAlert.classList.add('d-none');
+        successAlert.classList.add('d-none');
+        
+        try {
+            const response = await fetch('/auth/password-reset/send-code/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: email })
+            });
+            
+            const data = await response.json();
+            
+            if (response.ok) {
+                sessionStorage.setItem('resetToken', data.token);
+                successAlert.classList.remove('d-none');
+                successAlert.textContent = 'A new code has been sent to your email.';
+                
+                let count = 30;
+                const timer = setInterval(() => {
+                    resendBtn.textContent = `Resend available in ${count}s`;
+                    count--;
+                    if(count < 0) {
+                        clearInterval(timer);
+                        resendBtn.disabled = false;
+                        resendBtn.textContent = 'Resend Code';
+                    }
+                }, 1000);
+            } else {
+                throw data;
+            }
+        } catch(err) {
+            errorAlert.classList.remove('d-none');
+            errorAlert.textContent = extractErrorMessage(err) || 'Failed to resend code.';
+            resendBtn.disabled = false;
+            resendBtn.textContent = 'Resend Code';
+        }
+    });
+});
+</script>
+</body>
+</html>

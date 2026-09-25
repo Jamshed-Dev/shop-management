@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-4 border-bottom">
+    <h1 class="h2">Dashboard Overview</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <form id="dateFilterForm" class="d-flex me-2">
+            <div class="input-group input-group-sm">
+                <input type="date" class="form-control" id="startDate" required>
+                <span class="input-group-text">to</span>
+                <input type="date" class="form-control" id="endDate" required>
+                <button class="btn btn-outline-secondary" type="submit">Filter</button>
+                <button class="btn btn-outline-danger" type="button" id="resetBtn"><i class="bi bi-x"></i></button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="loading" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+</div>
+
+<div id="dashboardContent" class="d-none">
+    <!-- Top KPIs -->
+    <div class="row row-cols-1 row-cols-md-2 row-cols-xl-4 g-4 mb-4" id="statCards">
+        <!-- Injected via JS -->
+    </div>
+
+    <div class="row mb-4">
+        <!-- Sales Chart -->
+        <div class="col-xl-8 mb-4 mb-xl-0">
+            <div class="card h-100">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0 text-primary">Sales Overview</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="salesChart" height="100"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Order Status Progress -->
+        <div class="col-xl-4">
+            <div class="card h-100">
+                <div class="card-header">
+                    <h5 class="mb-0 text-primary">Order Status Distribution</h5>
+                </div>
+                <div class="card-body" id="statusDistribution">
+                    <!-- Injected via JS -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Recent Orders -->
+        <div class="col-lg-8 mb-4 mb-lg-0">
+            <div class="card h-100">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0 text-primary">Recent Orders</h5>
+                    <a href="/orders/" class="btn btn-sm btn-outline-primary">View All</a>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Order #</th>
+                                    <th>Customer</th>
+                                    <th>Status</th>
+                                    <th>Total</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recentOrdersBody">
+                                <!-- Injected via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Top Products & Low Stock -->
+        <div class="col-lg-4">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0 text-primary">Top Selling Products</h5>
+                </div>
+                <div class="card-body p-0">
+                    <ul class="list-group list-group-flush" id="topProductsList">
+                        <!-- Injected via JS -->
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card border-top border-danger border-3">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0 text-danger"><i class="bi bi-exclamation-triangle-fill me-2"></i> Low Stock Alerts</h5>
+                </div>
+                <div class="card-body p-0">
+                    <ul class="list-group list-group-flush" id="lowStockList">
+                        <!-- Injected via JS -->
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{% load static %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{% static 'js/dashboard.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <div class="d-flex align-items-center">
+        <a href="/products/" class="btn btn-sm btn-outline-secondary me-3">&larr; Back to Products</a>
+        <h1 class="h2 mb-0" id="pageTitle">Product Detail</h1>
+    </div>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <a id="editProductBtn" href="#" class="btn btn-sm btn-primary">
+            <i class="bi bi-pencil"></i> Edit Product
+        </a>
+    </div>
+</div>
+
+<div class="row" id="productDetailContent">
+    <div class="col-md-8">
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-white">
+                <h5 class="mb-0">Product Overview</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4 text-center mb-3 mb-md-0">
+                        <img id="detailImage" src="/static/images/placeholder.png" alt="Product Image" class="img-fluid rounded border p-1" style="max-height: 250px; object-fit: cover;">
+                    </div>
+                    <div class="col-md-8">
+                        <h4 id="detailTitle" class="mb-1">Loading...</h4>
+                        <p class="text-muted mb-3">SKU: <span id="detailSku"></span></p>
+                        <div class="mb-2"><strong>Status:</strong> <span id="detailStatusBadge"></span></div>
+                        <div class="mb-2"><strong>Slug:</strong> <span id="detailSlug"></span></div>
+                        <hr>
+                        <h6>Short Description</h6>
+                        <p id="detailShortDesc" class="text-muted"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-white">
+                <h5 class="mb-0">Description</h5>
+            </div>
+            <div class="card-body">
+                <p id="detailDesc" style="white-space: pre-wrap;"></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-white">
+                <h5 class="mb-0">Pricing</h5>
+            </div>
+            <div class="card-body">
+                <div class="d-flex justify-content-between mb-2">
+                    <span class="text-muted">Main Price:</span>
+                    <strong id="detailMainPrice"></strong>
+                </div>
+                <div class="d-flex justify-content-between mb-2">
+                    <span class="text-muted">Old Price:</span>
+                    <span id="detailOldPrice" class="text-decoration-line-through"></span>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <span class="text-muted">New Price:</span>
+                    <span id="detailNewPrice" class="text-success"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-white">
+                <h5 class="mb-0">Inventory</h5>
+            </div>
+            <div class="card-body">
+                <div class="d-flex justify-content-between mb-2">
+                    <span class="text-muted">Stock:</span>
+                    <strong id="detailStock"></strong>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <span class="text-muted">Stock Status:</span>
+                    <span id="detailStockStatus"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-white">
+                <h5 class="mb-0">Classification</h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-2">
+                    <span class="text-muted d-block">Collection:</span>
+                    <span id="detailCollection"></span>
+                </div>
+                <div>
+                    <span class="text-muted d-block">Product Type:</span>
+                    <span id="detailProductType"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-white">
+                <h5 class="mb-0">Metadata</h5>
+            </div>
+            <div class="card-body small text-muted">
+                <div class="mb-1">Created At: <span id="detailCreatedAt"></span></div>
+                <div>Updated At: <span id="detailUpdatedAt"></span></div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{% load static %}
+<script src="{% static 'js/products.js' %}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', loadProductDetail);
+</script>
+{% endblock %}
